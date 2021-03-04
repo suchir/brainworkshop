@@ -1054,19 +1054,16 @@ if cfg.USE_APPLAUSE:
 applauseplayer = get_pyglet_media_Player()
 musicplayer    = get_pyglet_media_Player()
 def play_applause():
-    applauseplayer.queue(random.choice(applausesounds))
-    applauseplayer.volume = cfg.SFX_VOLUME
-    if DEBUG: print("Playing applause")
-    applauseplayer.play()
+    random.choice(applausesounds).play()
 def play_music(percent):
     if 'music' in resourcepaths:
         if preventMusicSkipping: pyglet.clock.tick(poll=True) # Prevent music skipping 1
         if percent >= get_threshold_advance() and 'advance' in resourcepaths['music']:
-            musicplayer.queue(pyglet.media.load(random.choice(resourcepaths['music']['advance']), streaming = True))
+            pyglet.media.load(random.choice(resourcepaths['music']['advance']), streaming = True).play()
         elif percent >= (get_threshold_advance() + get_threshold_fallback()) // 2 and 'great' in resourcepaths['music']:
-            musicplayer.queue(pyglet.media.load(random.choice(resourcepaths['music']['great']), streaming = True))
+            pyglet.media.load(random.choice(resourcepaths['music']['great']), streaming = True).play()
         elif percent >= get_threshold_fallback() and 'good' in resourcepaths['music']:
-            musicplayer.queue(pyglet.media.load(random.choice(resourcepaths['music']['good']), streaming = True))
+            pyglet.media.load(random.choice(resourcepaths['music']['good']), streaming = True).play()
         else:
             return
     else:
@@ -4218,12 +4215,11 @@ def generate_stimulus():
     # initiate the chosen stimuli.
     # mode.current_stim['audio'] is a number from 1 to 8.
     if 'arithmetic' in mode.modalities[mode.mode] and mode.trial_number > mode.back:
-        player.queue(sounds['operations'][mode.current_operation])  # maybe we should try... catch... here
-        player.play()                                               # and maybe we should recycle sound players...
+        sounds['operations'][mode.current_operation].play()  # maybe we should try... catch... here
     elif 'audio' in mode.modalities[mode.mode] and not 'audio2' in mode.modalities[mode.mode]:
-        player.queue(mode.soundlist[mode.current_stim['audio']-1])
-        player.play()
+        mode.soundlist[mode.current_stim['audio']-1].play()
     elif 'audio2' in mode.modalities[mode.mode]:
+        assert False
         # dual audio modes - two sound players
         player.queue(mode.soundlist[mode.current_stim['audio']-1])
         player.min_distance = 100.0
